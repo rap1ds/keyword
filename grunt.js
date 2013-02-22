@@ -29,7 +29,9 @@ module.exports = function(grunt) {
                 node: true
             },
             globals: {
-                exports: true
+                exports: true,
+                it: true,
+                describe: true
             }
         }
     });

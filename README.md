@@ -81,12 +81,12 @@ key("Should Equal", function(next, a, b) {
 });
 
 // Load the keywords
-key(suite);
+key.suite(suite);
 
 console.log();
 
 // Run the keyword
-key("Test Google Search").then(function() {
+key.run("Test Google Search").then(function() {
     console.log("\nDone.\n")
     session.then(function(driver) {
         driver.quit();
