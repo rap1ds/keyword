@@ -23,7 +23,7 @@ describe('argument validations', function(){
       expect(key.validation.isLib([function() { /* invalid */}, "name"])).to.not.be.ok();
     })
   });
-  describe('#run()', function(){
+  describe.skip('#run()', function(){
     it('should throw for illegal arguments', function(){
       expect(key.validation.isRun(["Keyword Name Only"])).to.be.ok();
       expect(key.validation.isRun(["Keyword Name Only", ["And Args"]])).to.be.ok();
@@ -59,5 +59,14 @@ describe('helpers', function() {
     expect(key.helpers.isPlainObject(false)).not.to.be.ok();
     expect(key.helpers.isPlainObject("string")).not.to.be.ok();
     expect(key.helpers.isPlainObject(100)).not.to.be.ok();
+  });
+  describe('#splitBy', function() {
+    expect(key.helpers.splitBy([false, false, true, false, false, false, true, false], function(val) {
+      return val === true;
+    })).to.eql([[false, false], [true, false, false, false], [true, false]]);
+
+    expect(key.helpers.splitBy([1, 2, 3, 4, 5, 6], function(val) {
+      return val % 2 === 0;
+    })).to.eql([[1], [2, 3], [4, 5], [6]]);
   });
 })
