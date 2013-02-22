@@ -1,11 +1,3 @@
-# keyword
-
-Keyword-driven testing library
-
-## Getting Started
-Install the module with: `npm install keyword`
-
-```javascript
 // Define your keywords and test cases in JSON format
 
 var suite = {
@@ -34,7 +26,9 @@ var suite = {
 // This example uses WebDriver and PhantomJS
 var webdriver = require('selenium-node-webdriver');
 
-var key = requre('keyword');
+// You should use this:
+// var key = requre('keyword');
+var key = require('../lib/keyword');
 var assert = require('assert');
 
 var session = webdriver();
@@ -92,27 +86,3 @@ key("Test Google Search").then(function() {
         driver.quit();
     })
 });
-
-```
-
-## Examples
-
-`cd examples/`
-`npm install`
-`node google.js`
-
-## Documentation
-_(Coming soon)_
-
-## Examples
-_(Coming soon)_
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
-
-## Release History
-_(Nothing yet)_
-
-## License
-Copyright (c) 2013 Mikko Koski  
-Licensed under the MIT license.

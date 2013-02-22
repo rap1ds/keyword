@@ -1,0 +1,7 @@
+{
+	"name": "keyword-google-example",
+	"version": "0.0.1",
+	"dependencies": {
+		"selenium-node-webdriver": "*"
+	}
+}
