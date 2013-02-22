@@ -23,7 +23,7 @@ describe('argument validations', function(){
       expect(key.validation.isLib([function() { /* invalid */}, "name"])).to.not.be.ok();
     })
   });
-  describe.skip('#run()', function(){
+  describe('#run()', function(){
     it('should throw for illegal arguments', function(){
       expect(key.validation.isRun(["Keyword Name Only"])).to.be.ok();
       expect(key.validation.isRun(["Keyword Name Only", ["And Args"]])).to.be.ok();
