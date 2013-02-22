@@ -92,7 +92,7 @@ key("Test Google Search").then(function() {
         driver.quit();
     })
 });
-
+```
 
 ## Documentation
 _(Coming soon)_
