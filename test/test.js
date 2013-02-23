@@ -59,20 +59,22 @@ describe('argument validations', function(){
 });
 
 describe('helpers', function() {
+  var helpers = require("../lib/helpers");
+
   describe('#isPlainObject', function() {
-    expect(key.helpers.isPlainObject({})).to.be.ok();
-    expect(key.helpers.isPlainObject([])).not.to.be.ok();
-    expect(key.helpers.isPlainObject(function() {})).not.to.be.ok();
-    expect(key.helpers.isPlainObject(false)).not.to.be.ok();
-    expect(key.helpers.isPlainObject("string")).not.to.be.ok();
-    expect(key.helpers.isPlainObject(100)).not.to.be.ok();
+    expect(helpers.isPlainObject({})).to.be.ok();
+    expect(helpers.isPlainObject([])).not.to.be.ok();
+    expect(helpers.isPlainObject(function() {})).not.to.be.ok();
+    expect(helpers.isPlainObject(false)).not.to.be.ok();
+    expect(helpers.isPlainObject("string")).not.to.be.ok();
+    expect(helpers.isPlainObject(100)).not.to.be.ok();
   });
   describe('#splitBy', function() {
-    expect(key.helpers.splitBy([false, false, true, false, false, false, true, false], function(val) {
+    expect(helpers.splitBy([false, false, true, false, false, false, true, false], function(val) {
       return val === true;
     })).to.eql([[false, false], [true, false, false, false], [true, false]]);
 
-    expect(key.helpers.splitBy([1, 2, 3, 4, 5, 6], function(val) {
+    expect(helpers.splitBy([1, 2, 3, 4, 5, 6], function(val) {
       return val % 2 === 0;
     })).to.eql([[1], [2, 3], [4, 5], [6]]);
   });
