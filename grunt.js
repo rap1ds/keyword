@@ -1,10 +1,13 @@
 module.exports = function(grunt) {
     "use strict";
 
+    // Add our custom tasks.
+    grunt.loadNpmTasks('grunt-mocha-test');
+
     // Project configuration.
     grunt.initConfig({
         pkg: '<json:package.json>',
-        test: {
+        mochaTest: {
             files: ['test/**/*.js']
         },
         lint: {
@@ -37,5 +40,5 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', 'lint test');
+    grunt.registerTask('default', 'lint mochaTest');
 };

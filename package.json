@@ -28,11 +28,12 @@
     "underscore": "1.4.x"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "mocha"
   },
   "devDependencies": {
     "grunt": "~0.3.15",
-    "expect.js": "0.2.x"
+    "expect.js": "0.2.x",
+    "grunt-mocha-test": "0.2.x"
   },
   "keywords": ["keyword", "testing", "atdd"]
 }
