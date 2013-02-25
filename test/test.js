@@ -51,10 +51,12 @@ describe('argument validations', function(){
     });
   });
   describe('#isReturn()', function() {
-    expect(key.validation.isReturn("=> $return")).to.be.ok();
-    expect(key.validation.isReturn("=> return")).to.not.be.ok();
-    expect(key.validation.isReturn("=>")).to.not.be.ok();
-    expect(key.validation.isReturn("Something else")).to.not.be.ok();
+      it("returns true if argument is return statement", function() {
+        expect(key.validation.isReturn("=> $return")).to.be.ok();
+        expect(key.validation.isReturn("=> return")).to.not.be.ok();
+        expect(key.validation.isReturn("=>")).to.not.be.ok();
+        expect(key.validation.isReturn("Something else")).to.not.be.ok();
+    })
   });
 });
 
@@ -62,20 +64,29 @@ describe('helpers', function() {
   var helpers = require("../lib/helpers");
 
   describe('#isPlainObject', function() {
-    expect(helpers.isPlainObject({})).to.be.ok();
-    expect(helpers.isPlainObject([])).not.to.be.ok();
-    expect(helpers.isPlainObject(function() {})).not.to.be.ok();
-    expect(helpers.isPlainObject(false)).not.to.be.ok();
-    expect(helpers.isPlainObject("string")).not.to.be.ok();
-    expect(helpers.isPlainObject(100)).not.to.be.ok();
+    it("returns true, if argument is plain object", function() {
+      expect(helpers.isPlainObject({})).to.be.ok();
+      expect(helpers.isPlainObject([])).not.to.be.ok();
+      expect(helpers.isPlainObject(function() {})).not.to.be.ok();
+      expect(helpers.isPlainObject(false)).not.to.be.ok();
+      expect(helpers.isPlainObject("string")).not.to.be.ok();
+      expect(helpers.isPlainObject(100)).not.to.be.ok();
+    });
   });
   describe('#splitBy', function() {
-    expect(helpers.splitBy([false, false, true, false, false, false, true, false], function(val) {
-      return val === true;
-    })).to.eql([[false, false], [true, false, false, false], [true, false]]);
+    it("splits array, if condition is true", function() {
+      expect(helpers.splitBy([false, false, true, false, false, false, true, false], function(val) {
+        return val === true;
+      })).to.eql([[false, false], [true, false, false, false], [true, false]]);
 
-    expect(helpers.splitBy([1, 2, 3, 4, 5, 6], function(val) {
-      return val % 2 === 0;
-    })).to.eql([[1], [2, 3], [4, 5], [6]]);
+      expect(helpers.splitBy([1, 2, 3, 4, 5, 6], function(val) {
+        return val % 2 === 0;
+      })).to.eql([[1], [2, 3], [4, 5], [6]]);
+    });
+  });
+  describe("#pickReturnVar", function() {
+    it("return variable name", function() {
+      expect(helpers.pickReturnVar("=> $returnMe")).to.be("returnMe");
+    })
   });
 });
