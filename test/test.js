@@ -116,8 +116,27 @@ describe('helpers', function() {
       expect(helpers.replaceArgPlaceholders([])).to.eql([]);
       expect(helpers.replaceArgPlaceholders([1])).to.eql([1]);
       expect(helpers.replaceArgPlaceholders([1, 2, "$var1", "$var2"], vars)).to.eql([1, 2, "foo", "bar"]);
-      expect(helpers.replaceArgPlaceholders([1, 2, "$var1", "$var2", "$var3"], vars)).to.eql([1, 2, "foo", "bar", undefined])
+      expect(helpers.replaceArgPlaceholders([1, 2, "$var1", "$var2", "$var3"], vars)).to.eql([1, 2, "foo", "bar", undefined]);
       expect(helpers.replaceArgPlaceholders.bind(null, [1, 2, "$var1", "$var2", "$var3", "$var4"], vars)).to.throwError();
-    })
-  })
+    });
+  });
+  describe("#createKeywords", function() {
+    it("takes arguments passed to `key.def` and return keyword objects", function() {
+      var defArgs = [
+        "Keyword1",
+        "Keyword2", ["some arguments 1"],
+        "Keyword3", ["some arguments 2"], "=> $returnVariable",
+        "Keyword4", ["some arguments 3"],
+        "Keyword5"
+      ];
+
+      expect(helpers.createKeywords(defArgs)).to.eql([
+        {"name": "Keyword1"},
+        {"name": "Keyword2", "args": ["some arguments 1"]},
+        {"name": "Keyword3", "args": ["some arguments 2"], "returnVar": "returnVariable"},
+        {"name": "Keyword4", "args": ["some arguments 3"]},
+        {"name": "Keyword5"}
+      ]);
+    });
+  });
 });
