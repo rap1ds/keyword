@@ -139,4 +139,13 @@ describe('helpers', function() {
       ]);
     });
   });
+  describe("#createLocalEnv", function() {
+    it("creates new local value and sets the passed arguments to $1, $2, etc", function() {
+      var localVars = helpers.createLocalEnv(["value1", "another", 50, true]);
+      expect(localVars.get("1")).to.eql("value1");
+      expect(localVars.get("2")).to.eql("another")
+      expect(localVars.get("3")).to.eql(50)
+      expect(localVars.get("4")).to.eql(true);
+    })
+  })
 });
