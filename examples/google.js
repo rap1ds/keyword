@@ -75,7 +75,6 @@ key("Should Equal", function(next, a, b) {
 });
 
 // Load the keywords
-debugger;
 key.suite(suite);
 
 console.log();
