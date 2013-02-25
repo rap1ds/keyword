@@ -105,4 +105,19 @@ describe('helpers', function() {
         .to.eql({next: next, args: [arg1, arg2], keywordInfo: keywordInfo, vars: vars});
     });
   });
+  describe("#replaceArgPlaceholders", function() {
+    it("returns array where variable names have been replaced with values", function() {
+      var vars = helpers.localVars();
+      vars.set("var1", "foo");
+      vars.set("var2", "bar");
+      vars.set("var3", undefined);
+
+
+      expect(helpers.replaceArgPlaceholders([])).to.eql([]);
+      expect(helpers.replaceArgPlaceholders([1])).to.eql([1]);
+      expect(helpers.replaceArgPlaceholders([1, 2, "$var1", "$var2"], vars)).to.eql([1, 2, "foo", "bar"]);
+      expect(helpers.replaceArgPlaceholders([1, 2, "$var1", "$var2", "$var3"], vars)).to.eql([1, 2, "foo", "bar", undefined])
+      expect(helpers.replaceArgPlaceholders.bind(null, [1, 2, "$var1", "$var2", "$var3", "$var4"], vars)).to.throwError();
+    })
+  })
 });
