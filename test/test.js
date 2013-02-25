@@ -90,4 +90,19 @@ describe('helpers', function() {
       expect(helpers.pickReturnVar("=> $returnMe")).to.be("returnMe");
     })
   });
+  describe("#parseKeywordRunArgs", function() {
+    it("returns object with parsed args", function() {
+      var next = function() {};
+      var arg1 = "arg1";
+      var arg2 = "$var2";
+      var keywordInfo = {name: "keyword"};
+      var vars = {var2: 2};
+
+      expect(helpers.parseKeywordRunArgs([next, keywordInfo, vars]))
+        .to.eql({next: next, args: [], keywordInfo: keywordInfo, vars: vars});
+
+      expect(helpers.parseKeywordRunArgs([next, arg1, arg2, keywordInfo, vars]))
+        .to.eql({next: next, args: [arg1, arg2], keywordInfo: keywordInfo, vars: vars});
+    });
+  });
 });
