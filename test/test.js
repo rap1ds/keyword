@@ -57,7 +57,7 @@ describe('argument validations', function(){
         expect(validators.isReturn("=> return")).to.not.be.ok();
         expect(validators.isReturn("=>")).to.not.be.ok();
         expect(validators.isReturn("Something else")).to.not.be.ok();
-    })
+    });
   });
 });
 
@@ -88,7 +88,7 @@ describe('helpers', function() {
   describe("#pickReturnVar", function() {
     it("return variable name", function() {
       expect(helpers.pickReturnVar("=> $returnMe")).to.be("returnMe");
-    })
+    });
   });
   describe("#parseKeywordRunArgs", function() {
     it("returns object with parsed args", function() {
