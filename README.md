@@ -3,7 +3,6 @@
 Keyword-driven testing library
 
 ## Getting Started
-Install the module with: `npm install keyword`
 
 ```javascript
 // Define your keywords and test cases in JSON format
