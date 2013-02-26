@@ -5,14 +5,21 @@ var key = require("../lib/keyword");
 
 describe('argument validations', function(){
   var validators = require("../lib/validators");
-  describe('#suite()', function(){
+  describe('#isValidSuiteArgs()', function(){
     it('should throw for illegal arguments', function(){
-      expect(validators.isSuite([{}])).to.be.ok();
-      expect(validators.isSuite([["invalid"]])).to.not.be.ok();
-      expect(validators.isSuite([function() { /* invalid */}])).to.not.be.ok();
+      expect(validators.isValidSuiteArgs([{}])).to.be.ok();
+      expect(validators.isValidSuiteArgs([["invalid"]])).to.not.be.ok();
+      expect(validators.isValidSuiteArgs([function() { /* invalid */}])).to.not.be.ok();
     });
   });
-  describe('#lib()', function(){
+  describe.skip('#isValidKeywordSyntax()', function(){
+    it('should throw for illegal arguments', function(){
+      expect(validators.isValidSuiteArgs([{}])).to.be.ok();
+      expect(validators.isValidSuiteArgs([["invalid"]])).to.not.be.ok();
+      expect(validators.isValidSuiteArgs([function() { /* invalid */}])).to.not.be.ok();
+    });
+  });
+  describe('#isLib()', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isLib(["name", function() {}])).to.be.ok();
       expect(validators.isLib(["name", function() {}])).to.be.ok();
@@ -20,7 +27,7 @@ describe('argument validations', function(){
       expect(validators.isLib([function() { /* invalid */}, "name"])).to.not.be.ok();
     });
   });
-  describe('#run()', function(){
+  describe('#isRun()', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isRun(["Keyword Name Only"])).to.be.ok();
       expect(validators.isRun(["Keyword Name Only", ["And Args"]])).to.be.ok();
