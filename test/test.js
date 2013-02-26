@@ -12,13 +12,6 @@ describe('argument validations', function(){
       expect(validators.isSuite([function() { /* invalid */}])).to.not.be.ok();
     });
   });
-  describe('#def()', function(){
-    it('should throw for illegal arguments', function(){
-      expect(validators.isDef(["name", function() {}])).to.be.ok();
-      expect(validators.isDef([["invalid"]])).to.not.be.ok();
-      expect(validators.isDef([function() { /* invalid */}, "name"])).to.not.be.ok();
-    });
-  });
   describe('#lib()', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isLib(["name", function() {}])).to.be.ok();
