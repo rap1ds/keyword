@@ -9,10 +9,5 @@
   "undef": true,
   "boss": true,
   "eqnull": true,
-  "node": true,
-  "globals": {
-    "exports": true,
-    "it": true,
-    "describe": true
-  }
+  "node": true
 }
