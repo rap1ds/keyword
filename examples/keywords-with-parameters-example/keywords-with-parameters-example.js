@@ -3,12 +3,9 @@
 
 // Require keyword library
 var key = require('keyword');
-var _ = require('underscore');
 
 // Import keyword definitions
-_.forEach(require('./lowlevel-keywords'), function(fn, name) {
-    key(name, fn);
-});
+key(require('./lowlevel-keywords'));
 key.suite(require('./highlevel-keywords'));
 
 key.run("Greet Mikko").then(function() {
