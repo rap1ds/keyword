@@ -1,6 +1,79 @@
-# keyword
+# Keyword
 
-Keyword-driven testing library
+A Keyword-driven testing library for node.
+
+The library allows you to write low-level keywords that can be used for integration testing. By combining the low-level keywords, you can create new high-level keywords without writing any code. Low-level keyword maps to a JavaScript function, where as high-level keyword contains only other high or low-level keywords.
+
+Let's write the first low-level keywords `Hello World`, which prints, "Hello World" and `How are you?` which prints "How are you?", obviously.
+
+```javascript
+// lowlevel-keywords.js
+
+var lowlevelKeywords = {
+    "Hello World": function(next) {
+        console.log("Hello World");
+        next();
+    },
+    "How are you?": function(next) {
+        console.log("How are you?");
+        next();
+    }
+};
+
+module.exports = lowlevelKeywords;
+```
+
+Pretty simple stuff. Now, we can create a suite of high-level keywords.
+
+Let's create our first high-level keyword `Greet the World`, which says hello and asks how it is going. High-level keywords can be are defined as plain JavaScript object.
+
+```javascript
+// highlevel-keywords.js
+
+var highlevelKeywords = {
+    "Greet the World": [
+        "Hello World",
+        "How are you?"
+    ]
+};
+
+module.exports = highlevelKeywords;
+```
+
+Next, we want to run our keywords. Here's the code that runs the keyword `Greet the World`:
+
+```javascript
+// basic-example.js
+
+// Require keyword library
+var key = require('keyword');
+var _ = require('underscore');
+
+// Import keyword definitions
+_.forEach(require('./lowlevel-keywords'), function(fn, name) {
+    key(name, fn);
+});
+key.suite(require('./highlevel-keywords'));
+
+key.run("Greet the World").then(function() {
+    // All done.
+});
+```
+
+Now we can run the example by typing
+
+```bash
+$ node basic-example.js
+```
+
+Output
+
+```bash
+> Hello World
+> How are you?
+```
+
+[Click here to see the whole example](examples/basic-example)
 
 ## Getting Started
 
