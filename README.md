@@ -166,6 +166,26 @@ Output
 
 [Click here to see the whole example](examples/keywords-with-parameters-example)
 
+## How does this relate to testing??
+
+Ok, now you've seen how to define and use keywords, but I bet you're eager to know how does this make integration testing awesome!
+
+Web application integration testing is usually done by threating the application as a black box which you interact through the browser. The test cases for integration tests contain a lot of repeating tasks, such as clicking an element or filling in a form, etc. These repearing tasks can be defined as a general purpose low-level keywords, such as `Click`, `Fill Input`, `Navigate To URL`, etc.
+
+Imaging you're testing a social media application. Your task is to test sending message from a user Jane to user David.
+
+First thing you have to do is to login as a Jane. This can be done by navigation to the login page (using `Navigate To URL`). Then you have to fill in user credentials (using `Fill Input`) and click login button (`Click`). And all these you can combine and create a new high-level keyword, `Login as`.
+
+After that you'll do the messaging stuff, but then you need to assert that David really got the message. So how would you do that? Well, you can use the `Login as` keyword to login with David's account and see if the message arrived!
+
+I bet you can already see the point of keywords. By defining general purpose low-level keywords, you can easily combine them and create complex high-level keywords that will make your integration testing awesome!
+
+## How to interact with the browser?
+
+The library doesn't care how you interact with the browser and what is the browser you're using. You can use for example Zombie, but my favorite is to use PhantomJS via Node WebDriver.
+
+See the Google Search example for PhantomJS via WebDriver
+
 ## Getting Started
 
 ```javascript
