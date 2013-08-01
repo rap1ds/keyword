@@ -4,6 +4,8 @@ A Keyword-driven testing library for node.
 
 The library allows you to write low-level keywords that can be used for integration testing. By combining the low-level keywords, you can create new high-level keywords without writing any code. Low-level keyword maps to a JavaScript function, where as high-level keyword contains only other high or low-level keywords.
 
+## Hello World example
+
 Let's write the first low-level keywords `Hello World`, which prints, "Hello World" and `How are you?` which prints "How are you?", obviously.
 
 ```javascript
@@ -74,6 +76,95 @@ Output
 ```
 
 [Click here to see the whole example](examples/basic-example)
+
+## Keywords with params and return values
+
+In basic example, all the keyword were static. They didn't take any parameter nor did they return anything.
+
+Both, low-level and high-level keywords can take parameters and return values.
+
+Let's define three low-level keyword: 
+
+* `Print` takes `message` as a parameter and prints it to the console log. 
+* `Hello` takes `name` and returns a string saying "Hello" to that person.
+* `Join` takes two strings and joins them into one string, separating by a newline
+
+```javascript
+// lowlevel-keywords.js
+
+var lowlevelKeywords = {
+    "Print": function(next, message) {
+        console.log(message);
+        next();
+    },
+    "Hello": function(next, name) {
+        var returnValue = "Hello " + name;
+        next(returnValue);
+    },
+    "Join": function(next, str1, str2) {
+        var returnValue = [str1, str2].join("\n");
+        next(returnValue);
+    }
+};
+
+module.exports = lowlevelKeywords;
+```
+
+Alright! Our low-level keywords look a lot more general compared to the keywords in the basic example!
+
+Now let's create some high-level keywords that give parameters to the low-level keywords, saves the return value and return something themselves. `Greet Mikko` generates a greeting message for `Mikko`.
+
+```javascript
+// high-level-keywords.js
+
+var highlevelKeywords = {
+    "Create a greeting": [
+        "Hello", ["$1"], "=> $helloMikko",
+        "Join", ["$helloMikko", "How are you?"], "=> $return"
+    ],
+    "Greet Mikko": [
+        "Create a greeting", ["Mikko"], "=> $greeting",
+        "Print", "$greeting"
+    ]
+};
+
+module.exports = highlevelKeywords;
+```
+
+And then the `runner.js` file, which is mostly the same as in the previous example
+
+```javascript
+// keywords-with-parameters-example.js
+
+// Require keyword library
+var key = require('keyword');
+var _ = require('underscore');
+
+// Import keyword definitions
+_.forEach(require('./lowlevel-keywords'), function(fn, name) {
+    key(name, fn);
+});
+key.suite(require('./highlevel-keywords'));
+
+key.run("Greet Mikko").then(function() {
+    // All done.
+});
+```
+
+Now we can run the example by typing
+
+```bash
+$ node keywords-with-parameters-example.js
+```
+
+Output
+
+```bash
+> Hello Mikko
+> How are you?
+```
+
+[Click here to see the whole example](examples/keywords-with-parameters-example)
 
 ## Getting Started
 
