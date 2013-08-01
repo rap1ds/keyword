@@ -27,6 +27,16 @@ describe('argument validations', function(){
       expect(validators.isLib([function() { /* invalid */}, "name"])).to.not.be.ok();
     });
   });
+  describe('#isSetOfLibs()', function(){
+    it('should throw for illegal arguments', function() {
+      expect(validators.isSetOfLibs(["name", function() {}])).to.not.be.ok();
+      expect(validators.isSetOfLibs(["invalid"])).to.not.be.ok();
+      expect(validators.isSetOfLibs([function() { /* invalid */}, "name"])).to.not.be.ok();
+      expect(validators.isSetOfLibs([{}])).to.not.be.ok();
+      expect(validators.isSetOfLibs([{"this is not": "valid set of libs"}])).to.not.be.ok();
+      expect(validators.isSetOfLibs([{"Keyword": function() {}}])).to.be.ok();
+    });
+  });
   describe('#isRun()', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isRun(["Keyword Name Only"])).to.be.ok();
@@ -63,6 +73,16 @@ describe('argument validations', function(){
 
 describe('helpers', function() {
   var helpers = require("../lib/helpers");
+
+  describe('#flip', function() {
+    it('takes function and returns function where params are flipped', function() {
+      function minus(a, b) {
+        return a - b;
+      }
+      var flippedMinus = helpers.flip(minus);
+      expect(flippedMinus(5, 2)).to.eql(-3);
+    });
+  });
 
   describe('#isPlainObject', function() {
     it("returns true, if argument is plain object", function() {
@@ -131,6 +151,32 @@ describe('helpers', function() {
       expect(localVars.get("2")).to.eql("another");
       expect(localVars.get("3")).to.eql(50);
       expect(localVars.get("4")).to.eql(true);
+    });
+  });
+});
+
+describe('keyword', function() {
+  describe('#lib', function() {
+    it('takes name and function as parameters', function() {
+      var fn = function() {};
+      var name = "This is keyword";
+      
+      key(name, fn);
+
+      expect(key.__internal.keywords[name]).to.eql(fn);
+    });
+
+    it('takes object as a parameter', function() {
+      var firstFn = function() { return "first"; };
+      var secondFn = function() { return "second"; };
+
+      key({
+        "First": firstFn,
+        "Second": secondFn
+      });
+
+      expect(key.__internal.keywords["First"]).to.eql(firstFn);
+      expect(key.__internal.keywords["Second"]).to.eql(secondFn);
     });
   });
 });
