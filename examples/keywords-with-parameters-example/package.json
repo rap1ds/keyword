@@ -1,0 +1,8 @@
+{
+  "name": "keywords-with-parameters-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "keyword": "git://github.com/rap1ds/keyword",
+    "underscore": "~1.5.1"
+  }
+}
