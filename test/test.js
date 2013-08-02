@@ -2,6 +2,7 @@
 
 var expect = require("expect.js");
 var key = require("../lib/keyword");
+var _ = require("underscore");
 
 describe('argument validations', function(){
   var validators = require("../lib/validators");
@@ -69,6 +70,24 @@ describe('argument validations', function(){
         expect(validators.isReturn("Something else")).to.not.be.ok();
     });
   });
+
+  describe('#isSetOfKeywords()', function() {
+      it("returns true if argument is a set of keywords, either high or low-level", function() {
+        expect(validators.isSetOfKeywords({})).to.not.be.ok();
+        expect(validators.isSetOfKeywords({"This is keywords name": "This is string in a wrong place"})).to.not.be.ok();
+        
+        expect(validators.isSetOfKeywords({"This is keyword": ["And this is sub key to run"]})).to.be.ok();
+        expect(validators.isSetOfKeywords({"This is keyword": function keywordFn() {}})).to.be.ok();
+        expect(validators.isSetOfKeywords({
+          "This is high-level keyword": [
+            "And this is sub key to run"
+          ],
+          "This is low-level keyword": function() {
+            console.log("This is low-level");
+          }
+        })).to.be.ok();
+    });
+  });
 });
 
 describe('helpers', function() {
@@ -81,6 +100,18 @@ describe('helpers', function() {
       }
       var flippedMinus = helpers.flip(minus);
       expect(flippedMinus(5, 2)).to.eql(-3);
+    });
+  });
+
+  describe('#or', function() {
+    it('takes two function and returns true if either or both returns true', function() {
+      var stringOrArray = helpers.or(_.isString, _.isArray);
+
+      expect(stringOrArray(1)).to.not.be.ok();
+      expect(stringOrArray({})).to.not.be.ok();
+      expect(stringOrArray(false)).to.not.be.ok();
+      expect(stringOrArray("string")).to.be.ok();
+      expect(stringOrArray(["array"])).to.be.ok();
     });
   });
 
