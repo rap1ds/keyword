@@ -197,7 +197,7 @@ describe('keyword', function() {
       expect(key.__internal.keywords[name]).to.eql(fn);
     });
 
-    it('takes object as a parameter', function() {
+    it('takes set of low-level keyword', function() {
       var firstFn = function() { return "first"; };
       var secondFn = function() { return "second"; };
 
@@ -208,6 +208,29 @@ describe('keyword', function() {
 
       expect(key.__internal.keywords["First"]).to.eql(firstFn);
       expect(key.__internal.keywords["Second"]).to.eql(secondFn);
+    });
+
+    it('takes set of high-level keyword', function() {
+
+      key({
+        "First": ["First Sub Keyword", "Second Sub Keyword"],
+        "Second": ["First Second Sub Keyword", "Second Second Sub Keyword"]
+      });
+
+      expect(key.__internal.keywords["First"]).to.be.a("function");
+      expect(key.__internal.keywords["Second"]).to.be.a("function");
+    });
+
+    it('takes a mix of low and high-level keywords', function() {
+      key({
+        "First": function() {},
+        "Second": ["Sub keyword", "Another Sub keyword"],
+        "Third": function() {}
+      });
+
+      expect(key.__internal.keywords["First"]).to.be.a("function");
+      expect(key.__internal.keywords["Second"]).to.be.a("function");
+      expect(key.__internal.keywords["Third"]).to.be.a("function");
     });
   });
 });
