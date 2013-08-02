@@ -21,16 +21,14 @@ var suite = {
     "Pick First Search Result": [
         "Get Text Content Of First Tag", ["h3"], "=> $return"
     ]
-}
+};
 
 // Implement your low-level keywords
 
 // This example uses WebDriver and PhantomJS
 var webdriver = require('selenium-node-webdriver');
 
-// You should use this:
-// var key = requre('keyword');
-var key = require('../lib/keyword');
+var key = require('keyword');
 var assert = require('assert');
 
 var session = webdriver();
@@ -61,7 +59,7 @@ key("Get Text Content Of First Tag", function(next, elementTagName) {
     session.then(function(driver) {
         return driver.executeScript(function(tag) {
             // This script is run in browser context
-            return document.querySelector('h3.r').textContent;
+            return document.querySelector(tag).textContent;
         }, elementTagName)
         .then(function(firstHit) {
             console.log("The first Google hit:", firstHit);
@@ -83,8 +81,8 @@ console.log();
 
 // Run the keyword
 key.run("Test Google Search").then(function() {
-    console.log("\nDone.\n")
+    console.log("\nDone.\n");
     session.then(function(driver) {
         driver.quit();
-    })
+    });
 });

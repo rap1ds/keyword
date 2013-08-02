@@ -2,6 +2,7 @@
 	"name": "keyword-google-example",
 	"version": "0.0.1",
 	"dependencies": {
+		"keyword": "git://github.com/rap1ds/keyword",
 		"selenium-node-webdriver": "*",
 		"underscore": "1.4.x"
 	}

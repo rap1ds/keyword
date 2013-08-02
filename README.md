@@ -184,11 +184,18 @@ I bet you can already see the point of keywords. By defining general purpose low
 
 The library doesn't care how you interact with the browser and what is the browser you're using. You can use for example Zombie, but my favorite is to use PhantomJS via Node WebDriver.
 
-See the Google Search example for PhantomJS via WebDriver
+See the [Google Search example](examples/google) below for PhantomJS via WebDriver.
 
-## Getting Started
+To run the example, you have to have PhantomJS running with WebDriver on port 4444. To do this, install PhantomJS and type
+
+```bash
+phantomjs --webdriver=4444 &
+```
 
 ```javascript
+
+"use strict";
+
 // Define your keywords and test cases in JSON format
 
 var suite = {
@@ -210,14 +217,14 @@ var suite = {
     "Pick First Search Result": [
         "Get Text Content Of First Tag", ["h3"], "=> $return"
     ]
-}
+};
 
 // Implement your low-level keywords
 
 // This example uses WebDriver and PhantomJS
 var webdriver = require('selenium-node-webdriver');
 
-var key = requre('keyword');
+var key = require('keyword');
 var assert = require('assert');
 
 var session = webdriver();
@@ -248,7 +255,7 @@ key("Get Text Content Of First Tag", function(next, elementTagName) {
     session.then(function(driver) {
         return driver.executeScript(function(tag) {
             // This script is run in browser context
-            return document.querySelector('h3.r').textContent;
+            return document.querySelector(tag).textContent;
         }, elementTagName)
         .then(function(firstHit) {
             console.log("The first Google hit:", firstHit);
@@ -270,10 +277,10 @@ console.log();
 
 // Run the keyword
 key.run("Test Google Search").then(function() {
-    console.log("\nDone.\n")
+    console.log("\nDone.\n");
     session.then(function(driver) {
         driver.quit();
-    })
+    });
 });
 ```
 
@@ -282,11 +289,28 @@ _(Coming soon)_
 
 ## Examples
 
-To run the example:
+[Basic example:](examples/keywords-with-parameters)
 
-```shell
-cd examples
+```bash
+cd examples/basic
 npm install
+node basic.js
+```
+
+[Keywords with parameters example:](examples/keywords-with-parameters)
+
+```bash
+cd examples/keywords-with-parameters
+npm install
+node keywords-with-parameters.js
+```
+
+[Google example:](examples/google)
+
+```bash
+cd examples/google
+npm install
+phantomjs --webdriver=4444 &
 node google.js
 ```
 
