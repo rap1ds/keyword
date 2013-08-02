@@ -148,7 +148,7 @@ key.run("Greet Mikko").then(function() {
 Now we can run the example by typing
 
 ```bash
-$ node keywords-with-parameters-example.js
+$ node keywords-with-parameters.js
 ```
 
 Output
@@ -185,7 +185,7 @@ See the [Google Search example](examples/google) below for PhantomJS via WebDriv
 To run the example, you have to have PhantomJS running with WebDriver on port 4444. To do this, install PhantomJS and type
 
 ```bash
-phantomjs --webdriver=4444 &
+$ phantomjs --webdriver=4444 &
 ```
 
 ```javascript
