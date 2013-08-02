@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "homepage": "https://github.com/rap1ds/keyword",
   "author": {
-    "name": "Mikko Koski"
+    "name": "Mikko Koski",
+    "email": "mikkokos@gmail.com"
   },
   "repository": {
     "type": "git",
