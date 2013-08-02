@@ -1,7 +1,12 @@
 "use strict";
 
-// Define your keywords and test cases in JSON format
+var key = require('keyword');
+var assert = require('assert');
+// This example uses WebDriver and PhantomJS
+var webdriver = require('selenium-node-webdriver');
+var session = webdriver();
 
+// Define keywords
 var suite = {
 
     /***** The main test case *****/
@@ -10,7 +15,7 @@ var suite = {
         "Should Equal", ["$searchResult", "Keyword-driven testing - Wikipedia, the free encyclopedia"]
     ],
 
-    /***** Define keywords ******/
+    /***** Define high-level keywords ******/
     "Google Search For": [
         "Go To Page", ["http://google.com"],
         "Fill Input By Name", ["q", "$1"],
@@ -20,62 +25,53 @@ var suite = {
 
     "Pick First Search Result": [
         "Get Text Content Of First Tag", ["h3"], "=> $return"
-    ]
+    ],
+
+    /***** Define low-level keywords ******/
+    "Go To Page": function(next, url) {
+        session.then(function(driver) {
+            console.log("Going to", url);
+            return driver.get(url);
+        }).done(next);
+    },
+
+    "Fill Input By Name": function(next, elementName, text) {
+        session.then(function(driver) {
+            return driver.
+                findElement(driver.webdriver.By.name(elementName)).
+                sendKeys(text);
+        }).done(next);
+    },
+
+    "Click Element By Name": function(next, elementName) {
+        session.then(function(driver) {
+            return driver.
+                findElement(driver.webdriver.By.name(elementName)).click();
+        }).done(next);
+    },
+
+    "Get Text Content Of First Tag": function(next, elementTagName) {
+        session.then(function(driver) {
+            return driver.executeScript(function(tag) {
+                // This script is run in browser context
+                return document.querySelector(tag).textContent;
+            }, elementTagName)
+            .then(function(firstHit) {
+                console.log("The first Google hit:", firstHit);
+                return firstHit;
+            });
+        }).done(next);
+    },
+
+    "Should Equal": function(next, a, b) {
+        console.log("Should Equal: '" + a + "' and '" + b + "'");
+        assert(a === b);
+        next();
+    }
 };
 
-// Implement your low-level keywords
-
-// This example uses WebDriver and PhantomJS
-var webdriver = require('selenium-node-webdriver');
-
-var key = require('keyword');
-var assert = require('assert');
-
-var session = webdriver();
-
-key("Go To Page", function(next, url) {
-    session.then(function(driver) {
-        console.log("Going to", url);
-        return driver.get(url);
-    }).done(next);
-});
-
-key("Fill Input By Name", function(next, elementName, text) {
-    session.then(function(driver) {
-        return driver.
-            findElement(driver.webdriver.By.name(elementName)).
-            sendKeys(text);
-    }).done(next);
-});
-
-key("Click Element By Name", function(next, elementName) {
-    session.then(function(driver) {
-        return driver.
-            findElement(driver.webdriver.By.name(elementName)).click();
-    }).done(next);
-});
-
-key("Get Text Content Of First Tag", function(next, elementTagName) {
-    session.then(function(driver) {
-        return driver.executeScript(function(tag) {
-            // This script is run in browser context
-            return document.querySelector(tag).textContent;
-        }, elementTagName)
-        .then(function(firstHit) {
-            console.log("The first Google hit:", firstHit);
-            return firstHit;
-        });
-    }).done(next);
-});
-
-key("Should Equal", function(next, a, b) {
-    console.log("Should Equal: '" + a + "' and '" + b + "'");
-    assert(a === b);
-    next();
-});
-
 // Load the keywords
-key.suite(suite);
+key(suite);
 
 console.log();
 

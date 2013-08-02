@@ -6,7 +6,7 @@ var key = require('keyword');
 
 // Import keyword definitions
 key(require('./lowlevel-keywords'));
-key.suite(require('./highlevel-keywords'));
+key(require('./highlevel-keywords'));
 
 key.run("Greet Mikko").then(function() {
     // All done.
