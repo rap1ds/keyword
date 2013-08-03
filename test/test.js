@@ -186,7 +186,7 @@ describe('helpers', function() {
   });
 });
 
-describe('keyword', function() {
+describe.only('keyword', function() {
   describe('#lib', function() {
     it('takes name and function as parameters', function() {
       var fn = function() {};
@@ -231,6 +231,33 @@ describe('keyword', function() {
       expect(key.__internal.keywords["First3"]).to.be.a("function");
       expect(key.__internal.keywords["Second3"]).to.be.a("function");
       expect(key.__internal.keywords["Third3"]).to.be.a("function");
+    });
+  });
+  describe('#injector', function() {
+    it('is called before keyword run', function() {
+
+      key("Injected key", function(next, injected) {
+        expect(injected).to.eql("This was injected");
+        next("This is the return value");
+      });
+
+      key.injector(function(name, fn, args) {
+        var next = _.head(args);
+        var rest = _.tail(args);
+        var injected = "This was injected";
+        var after = function(retVal) {
+          expect(retVal).to.eql("This is the return value");
+          next(retVal + " from the next");
+        };
+
+        expect(name).to.eql("Injected key");
+
+        fn.apply(null, [after].concat([injected]).concat(rest));
+      });
+
+      key.run("Injected key").then(function(retVal) {
+        expect(retVal).to.eql("This is the return value from the next");
+      });
     });
   });
 });
