@@ -202,35 +202,35 @@ describe('keyword', function() {
       var secondFn = function() { return "second"; };
 
       key({
-        "First": firstFn,
-        "Second": secondFn
+        "First1": firstFn,
+        "Second1": secondFn
       });
 
-      expect(key.__internal.keywords["First"]).to.eql(firstFn);
-      expect(key.__internal.keywords["Second"]).to.eql(secondFn);
+      expect(key.__internal.keywords["First1"]).to.eql(firstFn);
+      expect(key.__internal.keywords["Second1"]).to.eql(secondFn);
     });
 
     it('takes set of high-level keyword', function() {
 
       key({
-        "First": ["First Sub Keyword", "Second Sub Keyword"],
-        "Second": ["First Second Sub Keyword", "Second Second Sub Keyword"]
+        "First2": ["First Sub Keyword", "Second Sub Keyword"],
+        "Second2": ["First Second Sub Keyword", "Second Second Sub Keyword"]
       });
 
-      expect(key.__internal.keywords["First"]).to.be.a("function");
-      expect(key.__internal.keywords["Second"]).to.be.a("function");
+      expect(key.__internal.keywords["First2"]).to.be.a("function");
+      expect(key.__internal.keywords["Second2"]).to.be.a("function");
     });
 
     it('takes a mix of low and high-level keywords', function() {
       key({
-        "First": function() {},
-        "Second": ["Sub keyword", "Another Sub keyword"],
-        "Third": function() {}
+        "First3": function() {},
+        "Second3": ["Sub keyword", "Another Sub keyword"],
+        "Third3": function() {}
       });
 
-      expect(key.__internal.keywords["First"]).to.be.a("function");
-      expect(key.__internal.keywords["Second"]).to.be.a("function");
-      expect(key.__internal.keywords["Third"]).to.be.a("function");
+      expect(key.__internal.keywords["First3"]).to.be.a("function");
+      expect(key.__internal.keywords["Second3"]).to.be.a("function");
+      expect(key.__internal.keywords["Third3"]).to.be.a("function");
     });
   });
 });
