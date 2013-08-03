@@ -250,12 +250,20 @@ describe.only('keyword', function() {
           next(retVal + " from the next");
         };
 
-        expect(name).to.eql("Injected key");
-
         fn.apply(null, [after].concat([injected]).concat(rest));
       });
 
+      key({
+        "Highlevel Injected key": [
+          "Injected key", "=> $return"
+        ]
+      });
+
       key.run("Injected key").then(function(retVal) {
+        expect(retVal).to.eql("This is the return value from the next");
+      });
+
+      key.run("Highlevel Injected key").then(function(retVal) {
         expect(retVal).to.eql("This is the return value from the next");
       });
     });
