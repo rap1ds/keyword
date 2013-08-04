@@ -34,7 +34,6 @@ var suite = {
     },
 
     "Fill Input By Name": function(next, driver, elementName, text) {
-        console.log("ELEMENT NAME", elementName);
         driver
         .findElement(driver.webdriver.By.name(elementName))
         .sendKeys(text)
@@ -49,7 +48,8 @@ var suite = {
     },
 
     "Get Text Content Of First Tag": function(next, driver, elementTagName) {
-        driver.executeScript(function(tag) {
+        driver
+        .executeScript(function(tag) {
                 // This script is run in browser context
                 return document.querySelector(tag).textContent;
             }, elementTagName)
