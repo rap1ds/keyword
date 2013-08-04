@@ -52,7 +52,7 @@ describe('argument validations', function(){
       expect(validators.isRun(["One Key", "=> $oneReturn", "Two Keys", "=> $twoReturn"])).to.be.ok();
       expect(validators.isRun(["One Key", ["One Args"], "Two Keys", ["Two Args"]])).to.be.ok();
       expect(validators.isRun([
-        "One Key", ["One Args"], "=> $oneReturn", 
+        "One Key", ["One Args"], "=> $oneReturn",
         "Two Keys", ["Two Args"], "=> $twoReturns"
         ])).to.be.ok();
 
@@ -189,12 +189,12 @@ describe('helpers', function() {
 describe.only('keyword', function() {
   describe('#lib', function() {
     it('takes name and function as parameters', function() {
-      var fn = function() {};
+      var fn = function() { return "This is return value"; };
       var name = "This is keyword";
       
       key(name, fn);
 
-      expect(key.__internal.keywords[name]).to.eql(fn);
+      expect(key.__internal.keywords[name]).to.be.a("function");
     });
 
     it('takes set of low-level keyword', function() {
@@ -206,8 +206,8 @@ describe.only('keyword', function() {
         "Second1": secondFn
       });
 
-      expect(key.__internal.keywords["First1"]).to.eql(firstFn);
-      expect(key.__internal.keywords["Second1"]).to.eql(secondFn);
+      expect(key.__internal.keywords["First1"]).to.be.a("function");
+      expect(key.__internal.keywords["Second1"]).to.be.a("function");
     });
 
     it('takes set of high-level keyword', function() {
@@ -234,7 +234,7 @@ describe.only('keyword', function() {
     });
   });
   describe('#injector', function() {
-    it('is called before keyword run', function() {
+    it('is called before low-level keyword run', function() {
 
       key("Injected key", function(next, injected) {
         expect(injected).to.eql("This was injected");
@@ -253,18 +253,36 @@ describe.only('keyword', function() {
         fn.apply(null, [after].concat([injected]).concat(rest));
       });
 
+      key.run("Injected key").then(function(retVal) {
+        expect(retVal).to.eql("This is the return value from the next");
+      });
+    });
+    it('works also with high-level keywords', function() {
       key({
         "Highlevel Injected key": [
           "Injected key", "=> $return"
         ]
       });
 
-      key.run("Injected key").then(function(retVal) {
-        expect(retVal).to.eql("This is the return value from the next");
-      });
-
       key.run("Highlevel Injected key").then(function(retVal) {
         expect(retVal).to.eql("This is the return value from the next");
+      });
+    });
+    it('does NOT inject anything on high-level keywords', function() {
+      key({
+        "Highlevel keyword With Param": [
+          "Params Should Equal", ["$1", "$2"], "=> $return"
+        ]
+      });
+
+      key("Params Should Equal", function(next, injected, firstParam, secondParam) {
+        expect(injected).to.eql("This was injected");
+        expect(firstParam).to.eql("Foo");
+        expect(secondParam).to.eql("Bar");
+      });
+
+      key.run("Highlevel keyword With Param", ["Foo", "Bar"]).then(function(retVal) {
+        expect(retVal).to.eql("This is the return value from the next joojoo");
       });
     });
   });
