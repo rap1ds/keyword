@@ -1,8 +1,5 @@
 {
-	"name": "keyword-google-example",
+	"name": "google-example",
 	"version": "0.0.1",
-	"dependencies": {
-		"selenium-node-webdriver": "*",
-		"underscore": "1.4.x"
-	}
+	"dependencies": { }
 }
