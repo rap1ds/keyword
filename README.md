@@ -27,7 +27,7 @@ module.exports = lowlevelKeywords;
 
 Pretty simple stuff.
 
-Let's create our first high-level keyword `Greet the World`, which says hello and asks how is it going. High-level keywords can be are defined as plain JavaScript object.
+Let's create our first high-level keyword `Greet the World`, which says hello and asks how is it going.
 
 ```javascript
 // highlevel-keywords.js
@@ -41,6 +41,9 @@ var highlevelKeywords = {
 
 module.exports = highlevelKeywords;
 ```
+
+The syntax is following: 
+* Keywords are defined as a map (plain JavaScript object) of keyword name and a function (for low-level keywords) or an array of keywords to run (for high-level keywords)
 
 Next, we want to run our keywords. Here's the code that runs the keyword `Greet the World`:
 
@@ -109,7 +112,7 @@ module.exports = lowlevelKeywords;
 
 Alright! Our low-level keywords look a lot more general compared to the keywords in the basic example!
 
-Now let's create some high-level keywords that give parameters to the low-level keywords, saves the return value and return something themselves. `Greet Mikko` generates a greeting message for `Mikko`.
+Now let's create some high-level keywords that give parameters to the low-level keywords and return something themselves. `Greet Mikko` generates a greeting message for `Mikko`.
 
 ```javascript
 // high-level-keywords.js
@@ -127,6 +130,13 @@ var highlevelKeywords = {
 
 module.exports = highlevelKeywords;
 ```
+
+The syntax is following: 
+* Parameters are in an array
+* Parameter value can be either a variable or a primitive, like a number or string
+* `$1` stands for the first parameter of the high-level keyword
+* The name of the variable where the return value is saved is a string, that starts with a fat arrow `=>` following by a variable name
+* Variable names always start with dollar sign `$`
 
 And then the `runner.js` file, which is mostly the same as in the previous example.
 
@@ -164,11 +174,11 @@ Output
 
 Ok, now you've seen how to define and use keywords, but I bet you're eager to know how does this make integration testing awesome!
 
-Web application integration testing is usually done by threating the application as a black box which you interact through the browser. The test cases for integration tests contain a lot of repeating tasks, such as clicking an element or filling in a form, etc. These repearing tasks can be defined as a general purpose low-level keywords, such as `Click`, `Fill Input`, `Navigate To URL`, etc.
+Web application integration testing is usually done by treating the application as a black box which you interact through a browser. The test cases contain a lot of repeating tasks, such as clicking an element or filling in a form, etc. Keyword.js lets you define these repeating tasks as a general purpose low-level keywords, such as `Click`, `Fill Input`, `Navigate To URL`, etc.
 
 Imaging you're testing an application which has users and the users are able to send messages to each other. Your task is to test sending message from a user Jane to user David.
 
-First thing you have to do is to login as a Jane. This can be done by navigation to the login page (using `Navigate To URL`). Then you have to fill in user credentials (using `Fill Input`) and click login button (`Click`). You can combine all these and create a new high-level keyword, `Login as`.
+First thing you have to do is to login as a Jane. This can be done by navigation to the login page (using `Navigate To URL`). Then you have to fill in user credentials (using `Fill Input`) and click login button (`Click`). You can combine all these and create a new high-level keyword, `Login as`, which takes user name as a parameter.
 
 After that you'll do the messaging stuff, but then you need to assert that David really got the message. So how would you do that? Well, you can use the `Login as` keyword to login with David's account and see if the message arrived!
 
@@ -180,7 +190,7 @@ The library doesn't care how you interact with the browser and what is the brows
 
 If you need to use a 'real' browser (Chrome, Firefox, IE, etc.) [WD.js](https://github.com/admc/wd) might help you. Haven't tried it, though.
 
-See the [Google Search example](examples/google) below for PhantomJS via WebDriver.
+See the [Google search without injector](examples/google-without-injector) below for PhantomJS via WebDriver example.
 
 To run the example, you have to have PhantomJS running with WebDriver on port 4444. To do this, install PhantomJS and type
 
@@ -275,11 +285,11 @@ key.run("Test Google Search").then(function() {
 
 ## Cleaner code with injector
 
-As you can see from the above example, hooking in a WebDriver session bring in some bloat code to each keyword. To get rid of the bloat, injector comes to help.
+As you can see from the above example, hooking up a WebDriver session brings in some bloat code to each keyword. To get rid of the bloat, injector comes to help.
 
-An injector is a function, that can execute before and after each keyword execution. Injector is also able to inject new parameter to the low-level keyword function.
+An injector is a function, that can execute before and after each keyword execution. Injector is also able to inject new parameters to the low-level keyword function.
 
-Here's the example Google example using injector. As you can see, the injector adds a `driver` parameter to each keyword.
+Here's the Google example with a WebDriver injector. As you can see, the injector adds a `driver` parameter to each keyword.
 
 ```javascript
 var key = require('keyword');
@@ -331,9 +341,9 @@ var suite = {
 
     "Get Text Content Of First Tag": function(next, driver, elementTagName) {
         driver.executeScript(function(tag) {
-                // This script is run in browser context
-                return document.querySelector(tag).textContent;
-            }, elementTagName)
+            // This script is run in browser context
+            return document.querySelector(tag).textContent;
+        }, elementTagName)
         .then(function(firstHit) {
             console.log("The first Google hit:", firstHit);
             return firstHit;
@@ -381,6 +391,15 @@ node basic.js
 cd examples/keywords-with-parameters
 npm install
 node keywords-with-parameters.js
+```
+
+[Google example (without injector):](examples/google-without-injector)
+
+```bash
+cd examples/google
+npm install
+phantomjs --webdriver=4444 &
+node google.js
 ```
 
 [Google example:](examples/google)
