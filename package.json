@@ -1,7 +1,7 @@
 {
   "name": "keyword",
   "description": "Keyword-driven testing library",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/rap1ds/keyword",
   "author": {
     "name": "Mikko Koski",
