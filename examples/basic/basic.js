@@ -2,7 +2,7 @@
 "use strict";
 
 // Require keyword library
-var key = require('keyword');
+var key = require('../../lib/keyword');
 
 // Import keyword definitions
 key(require('./lowlevel-keywords'));
