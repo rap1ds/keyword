@@ -25,7 +25,8 @@
     "node": ">= 0.6.0"
   },
   "dependencies": {
-    "underscore": "1.4.x"
+    "underscore": "1.4.x",
+    "selenium-node-webdriver": "*"
   },
   "scripts": {
     "test": "mocha"
