@@ -6,6 +6,12 @@ var _ = require("underscore");
 
 describe('argument validations', function(){
   var validators = require("../lib/validators");
+  describe('#isRegexpKeywordName()', function(){
+    it('should return regexp result', function(){
+      expect(validators.isRegexpKeywordName("/This is regexp (.*)/gi")[1]).to.eql("This is regexp (.*)");
+      expect(validators.isRegexpKeywordName("/This is regexp (.*)/gi")[2]).to.eql("gi");
+    });
+  });
   describe('#isValidSuiteArgs()', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isValidSuiteArgs([{}])).to.be.ok();
@@ -186,7 +192,7 @@ describe('helpers', function() {
   });
 });
 
-describe.only('keyword', function() {
+describe('keyword', function() {
   describe('#lib', function() {
     it('takes name and function as parameters', function() {
       var fn = function() { return "This is return value"; };
@@ -232,6 +238,17 @@ describe.only('keyword', function() {
       expect(key.__internal.keywords["Second3"]).to.be.a("function");
       expect(key.__internal.keywords["Third3"]).to.be.a("function");
     });
+    
+    it.skip('allows name to be a regexp', function() {
+      key({
+        "/This keyword ends to: (.*)/gi": function() {},
+      });
+
+      key.run("This keyword ends to: whatever").then(function(result) {
+        expect(result).to.eql("whatever");
+      });
+    });
+
   });
   describe('#injector', function() {
     it('is called before low-level keyword run', function() {
