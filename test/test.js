@@ -219,6 +219,7 @@ describe('runner', function() {
       expect(runner.findKeyword("Test", keywords)).to.eql(test1);
     });
     it('finds keyword by regexp', function() {
+      expect(runner.findKeyword("Any number 2", keywords).regexp).to.eql("Any number \\d");
       expect(runner.findKeyword("Any number 2", keywords).fn).to.eql(test2);
     });
   });
@@ -271,9 +272,11 @@ describe('keyword', function() {
       expect(key.__internal.keywords["Third3"]).to.be.a("function");
     });
     
-    it.skip('allows name to be a regexp', function() {
+    it('allows name to be a regexp', function() {
       key({
-        "/This keyword ends to: (.*)/gi": function() {},
+        "/This keyword ends to: (.*)/": function(next, regexp) {
+          next(regexp[1]);
+        },
       });
 
       key.run("This keyword ends to: whatever").then(function(result) {
