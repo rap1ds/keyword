@@ -10,6 +10,7 @@ describe('argument validations', function(){
     it('should return regexp result', function(){
       expect(validators.isRegexpKeywordName("/This is regexp (.*)/gi")[1]).to.eql("This is regexp (.*)");
       expect(validators.isRegexpKeywordName("/This is regexp (.*)/gi")[2]).to.eql("gi");
+      expect(validators.isRegexpKeywordName("This is not regexp")).to.be(null);
     });
   });
   describe('#isValidSuiteArgs()', function(){
@@ -121,6 +122,17 @@ describe('helpers', function() {
     });
   });
 
+  describe('#apply', function() {
+    it('takes array of arguments and applies them to given function', function() {
+      var appliedFn = helpers.apply(function(first, second) {
+        expect(first).to.eql("1");
+        expect(second).to.eql("2");
+      });
+
+      appliedFn(["1", "2"]);
+    });
+  });
+
   describe('#isPlainObject', function() {
     it("returns true, if argument is plain object", function() {
       expect(helpers.isPlainObject({})).to.be.ok();
@@ -188,6 +200,26 @@ describe('helpers', function() {
       expect(localVars.get("2")).to.eql("another");
       expect(localVars.get("3")).to.eql(50);
       expect(localVars.get("4")).to.eql(true);
+    });
+  });
+});
+
+describe('runner', function() {
+  var runner = require("../lib/runner");
+  describe('findKeyword', function() {
+    var test1 = function() { return "test1"; };
+    var test2 = function() { return "test2"; };
+
+    var keywords = {
+      "Test": test1,
+      "/Any number \\d/": test2
+    };
+
+    it('finds keyword by name', function() {
+      expect(runner.findKeyword("Test", keywords)).to.eql(test1);
+    });
+    it('finds keyword by regexp', function() {
+      expect(runner.findKeyword("Any number 2", keywords).fn).to.eql(test2);
     });
   });
 });
