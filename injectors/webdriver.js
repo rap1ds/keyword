@@ -28,7 +28,7 @@ function webdriverInjector(name, fn, args) {
     var next = _.head(args);
     var keywordArgs = _.rest(args);
 
-    session.then(function(driver) {
+    session.done(function(driver) {
         fn.apply(null, [next].concat([driver]).concat(keywordArgs));
     });
 }
