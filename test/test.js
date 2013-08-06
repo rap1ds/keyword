@@ -17,33 +17,33 @@ describe('argument validations', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isValidSuiteArgs([{}])).to.be.ok();
       expect(validators.isValidSuiteArgs([["invalid"]])).to.not.be.ok();
-      expect(validators.isValidSuiteArgs([function() { /* invalid */}])).to.not.be.ok();
-    });
+    expect(validators.isValidSuiteArgs([function() { /* invalid */}])).to.not.be.ok();
+  });
   });
   describe.skip('#isValidKeywordSyntax()', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isValidSuiteArgs([{}])).to.be.ok();
       expect(validators.isValidSuiteArgs([["invalid"]])).to.not.be.ok();
-      expect(validators.isValidSuiteArgs([function() { /* invalid */}])).to.not.be.ok();
-    });
+    expect(validators.isValidSuiteArgs([function() { /* invalid */}])).to.not.be.ok();
+  });
   });
   describe('#isLib()', function(){
     it('should throw for illegal arguments', function(){
       expect(validators.isLib(["name", function() {}])).to.be.ok();
       expect(validators.isLib(["name", function() {}])).to.be.ok();
       expect(validators.isLib(["invalid"])).to.not.be.ok();
-      expect(validators.isLib([function() { /* invalid */}, "name"])).to.not.be.ok();
-    });
+    expect(validators.isLib([function() { /* invalid */}, "name"])).to.not.be.ok();
+  });
   });
   describe('#isSetOfLibs()', function(){
     it('should throw for illegal arguments', function() {
       expect(validators.isSetOfLibs(["name", function() {}])).to.not.be.ok();
       expect(validators.isSetOfLibs(["invalid"])).to.not.be.ok();
-      expect(validators.isSetOfLibs([function() { /* invalid */}, "name"])).to.not.be.ok();
-      expect(validators.isSetOfLibs([{}])).to.not.be.ok();
-      expect(validators.isSetOfLibs([{"this is not": "valid set of libs"}])).to.not.be.ok();
-      expect(validators.isSetOfLibs([{"Keyword": function() {}}])).to.be.ok();
-    });
+    expect(validators.isSetOfLibs([function() { /* invalid */}, "name"])).to.not.be.ok();
+    expect(validators.isSetOfLibs([{}])).to.not.be.ok();
+    expect(validators.isSetOfLibs([{"this is not": "valid set of libs"}])).to.not.be.ok();
+    expect(validators.isSetOfLibs([{"Keyword": function() {}}])).to.be.ok();
+  });
   });
   describe('#isRun()', function(){
     it('should throw for illegal arguments', function(){
@@ -68,33 +68,33 @@ describe('argument validations', function(){
       expect(validators.isRun([["No Args Here"], "Keyword Name"])).to.not.be.ok();
       expect(validators.isRun(["=> $noReturnHere", "Keyword Name"])).to.not.be.ok();
     });
+});
+describe('#isReturn()', function() {
+  it("returns true if argument is return statement", function() {
+    expect(validators.isReturn("=> $return")).to.be.ok();
+    expect(validators.isReturn("=> return")).to.not.be.ok();
+    expect(validators.isReturn("=>")).to.not.be.ok();
+    expect(validators.isReturn("Something else")).to.not.be.ok();
   });
-  describe('#isReturn()', function() {
-      it("returns true if argument is return statement", function() {
-        expect(validators.isReturn("=> $return")).to.be.ok();
-        expect(validators.isReturn("=> return")).to.not.be.ok();
-        expect(validators.isReturn("=>")).to.not.be.ok();
-        expect(validators.isReturn("Something else")).to.not.be.ok();
-    });
-  });
+});
 
-  describe('#isSetOfKeywords()', function() {
-      it("returns true if argument is a set of keywords, either high or low-level", function() {
-        expect(validators.isSetOfKeywords({})).to.not.be.ok();
-        expect(validators.isSetOfKeywords({"This is keywords name": "This is string in a wrong place"})).to.not.be.ok();
-        
-        expect(validators.isSetOfKeywords({"This is keyword": ["And this is sub key to run"]})).to.be.ok();
-        expect(validators.isSetOfKeywords({"This is keyword": function keywordFn() {}})).to.be.ok();
-        expect(validators.isSetOfKeywords({
-          "This is high-level keyword": [
-            "And this is sub key to run"
-          ],
-          "This is low-level keyword": function() {
-            console.log("This is low-level");
-          }
-        })).to.be.ok();
-    });
+describe('#isSetOfKeywords()', function() {
+  it("returns true if argument is a set of keywords, either high or low-level", function() {
+    expect(validators.isSetOfKeywords({})).to.not.be.ok();
+    expect(validators.isSetOfKeywords({"This is keywords name": "This is string in a wrong place"})).to.not.be.ok();
+
+    expect(validators.isSetOfKeywords({"This is keyword": ["And this is sub key to run"]})).to.be.ok();
+    expect(validators.isSetOfKeywords({"This is keyword": function keywordFn() {}})).to.be.ok();
+    expect(validators.isSetOfKeywords({
+      "This is high-level keyword": [
+      "And this is sub key to run"
+      ],
+      "This is low-level keyword": function() {
+        console.log("This is low-level");
+      }
+    })).to.be.ok();
   });
+});
 });
 
 describe('helpers', function() {
@@ -177,11 +177,11 @@ describe('helpers', function() {
   describe("#createKeywords", function() {
     it("takes arguments passed to `key.def` and return keyword objects", function() {
       var defArgs = [
-        "Keyword1",
-        "Keyword2", ["some arguments 1"],
-        "Keyword3", ["some arguments 2"], "=> $returnVariable",
-        "Keyword4", ["some arguments 3"],
-        "Keyword5"
+      "Keyword1",
+      "Keyword2", ["some arguments 1"],
+      "Keyword3", ["some arguments 2"], "=> $returnVariable",
+      "Keyword4", ["some arguments 3"],
+      "Keyword5"
       ];
 
       expect(helpers.createKeywords(defArgs)).to.eql([
@@ -190,7 +190,7 @@ describe('helpers', function() {
         {"name": "Keyword3", "args": ["some arguments 2"], "returnVar": "returnVariable"},
         {"name": "Keyword4", "args": ["some arguments 3"]},
         {"name": "Keyword5"}
-      ]);
+        ]);
     });
   });
   describe("#createLocalEnv", function() {
@@ -273,69 +273,185 @@ describe('keyword', function() {
     });
     
     it('allows name to be a regexp', function() {
+      var dummyInjector = function(name, fn, args) {
+        fn.apply(null, [_.first(args), null].concat(_.tail(args)));
+      };
+      key.injector(dummyInjector);
+
       key({
-        "/This keyword ends to: (.*)/": function(next, regexp) {
+        "/This keyword ends to: (.*)/": function(next, injected, regexp) {
+          debugger;
           next(regexp[1]);
         },
       });
 
       key.run("This keyword ends to: whatever").then(function(result) {
+        debugger;
         expect(result).to.eql("whatever");
       });
     });
 
   });
-  describe('#injector', function() {
-    it('is called before low-level keyword run', function() {
+describe('#injector', function() {
+  it('is called before low-level keyword run', function() {
 
-      key("Injected key", function(next, injected) {
-        expect(injected).to.eql("This was injected");
-        next("This is the return value");
-      });
-
-      key.injector(function(name, fn, args) {
-        var next = _.head(args);
-        var rest = _.tail(args);
-        var injected = "This was injected";
-        var after = function(retVal) {
-          expect(retVal).to.eql("This is the return value");
-          next(retVal + " from the next");
-        };
-
-        fn.apply(null, [after].concat([injected]).concat(rest));
-      });
-
-      key.run("Injected key").then(function(retVal) {
-        expect(retVal).to.eql("This is the return value from the next");
-      });
+    key("Injected key", function(next, injected) {
+      expect(injected).to.eql("This was injected");
+      next("This is the return value");
     });
-    it('works also with high-level keywords', function() {
-      key({
-        "Highlevel Injected key": [
-          "Injected key", "=> $return"
-        ]
-      });
 
-      key.run("Highlevel Injected key").then(function(retVal) {
-        expect(retVal).to.eql("This is the return value from the next");
-      });
+    key.injector(function(name, fn, args) {
+      var next = _.head(args);
+      var rest = _.tail(args);
+      var injected = "This was injected";
+      var after = function(retVal) {
+        expect(retVal).to.eql("This is the return value");
+        next(retVal + " from the next");
+      };
+
+      fn.apply(null, [after].concat([injected]).concat(rest));
     });
-    it('does NOT inject anything on high-level keywords', function() {
-      key({
-        "Highlevel keyword With Param": [
-          "Params Should Equal", ["$1", "$2"], "=> $return"
-        ]
-      });
 
-      key("Params Should Equal", function(next, injected, firstParam, secondParam) {
-        expect(injected).to.eql("This was injected");
-        expect(firstParam).to.eql("Foo");
-        expect(secondParam).to.eql("Bar");
-      });
-
-      key.run("Highlevel keyword With Param", ["Foo", "Bar"]).then(function(retVal) {
-        expect(retVal).to.eql("This is the return value from the next joojoo");
-      });
+    key.run("Injected key").then(function(retVal) {
+      expect(retVal).to.eql("This is the return value from the next");
     });
+  });
+  it('works also with high-level keywords', function() {
+    key({
+      "Highlevel Injected key": [
+      "Injected key", "=> $return"
+      ]
+    });
+
+    key.run("Highlevel Injected key").then(function(retVal) {
+      expect(retVal).to.eql("This is the return value from the next");
+    });
+  });
+  it('does NOT inject anything on high-level keywords', function() {
+    key({
+      "Highlevel keyword With Param": [
+      "Params Should Equal", ["$1", "$2"], "=> $return"
+      ]
+    });
+
+    key("Params Should Equal", function(next, injected, firstParam, secondParam) {
+      expect(injected).to.eql("This was injected");
+      expect(firstParam).to.eql("Foo");
+      expect(secondParam).to.eql("Bar");
+    });
+
+    key.run("Highlevel keyword With Param", ["Foo", "Bar"]).then(function(retVal) {
+      expect(retVal).to.eql("This is the return value from the next joojoo");
+    });
+  });
+});
+});
+describe('expect.js', function() {
+  key(require('../keywords/assertations/expect'));
+
+  function Ferret() {}
+  var tobi = new Ferret();
+
+  function Mammal() {}
+  var person = new Mammal();
+
+  it('Expect ...', function() {
+    // FIXME Blah, regexp tests and expect need one injected param :/
+    var dummyInjector = function(name, fn, args) {
+      fn.apply(null, [_.first(args), null].concat(_.tail(args)));
+    };
+    key.injector(dummyInjector);
+
+    function test(name, params) {
+      var negativeName = name.indexOf(" Not") !== -1 ? 
+      name.replace(" Not", "") : name.replace(" To", " To Not");
+
+      // Run passing test
+      expect(function() {
+        key.run(name, params).then(_.identity);
+      }).to.not.throwError();
+
+      // Run failing test
+      expect(function() {
+        key.run(negativeName, params).then(_.identity);
+      }).to.throwError();
+    }
+    
+    test("Expect To Be", [{}.r, undefined]);
+    test("Expect To Eql", [{ a: 'b' }, { a: 'b' }]);
+    test("Expect To Be A", [5, 'number']);
+    test("Expect To Be An", [[], 'array']);
+
+    // ok: asserts that the value is truthy or not
+    test("Expect To Be Ok", [1]);
+    test("Expect To Be Ok", [true]);
+    test("Expect To Be Ok", [{}]);
+    test("Expect To Not Be Ok", [0]);
+
+    // be / equal: asserts === equality
+    test("Expect To Be", [1, 1]);
+    test("Expect Not To Equal", [NaN, NaN]);
+    test("Expect Not To Be", [1, true]);
+    test("Expect To Not Be", ['1', 1]);
+
+    // eql: asserts loose equality that works with objects
+    test("Expect To Eql", [{ a: 'b' }, { a: 'b' }]);
+    test("Expect To Eql", [1, '1']);
+
+    // a an : asserts typeof with support for array type and instanceof
+    test("Expect To Be A", [5, 'number']);
+    test("Expect To Be An", [[], 'array']);
+    test("Expect To Be An", [[], 'object']);
+
+    // Wtf, what's wrong with this?? test("Expect To Be A", [5, Number]);
+    test("Expect To Be An", [[], Array]);
+    test("Expect To Be A", [tobi, Ferret]);
+    test("Expect To Be A", [person, Mammal]);
+
+    // match: asserts String regular expression match
+    test("Expect To Match", ["1.2.3", /[0-9]+\.[0-9]+\.[0-9]+/]);
+
+    // contain: asserts indexOf for an array or string
+    test("Expect To Contain", [[1, 2], 1]);
+    test("Expect To Contain", ['hello world', 'world']);
+
+    // length: asserts array .length
+    test("Expect To Have Length", [[], 0]);
+    test("Expect To Have Length", [[1, 2, 3], 3]);
+
+    // empty: asserts that an array is empty or not
+    test("Expect To Be Empty", [[]]);
+    test("Expect To Be Empty", [{}]);
+    test("Expect To Be Empty", [{ length: 0, duck: 'typing' }]);
+    test("Expect To Not Be Empty", [{ my: 'object' }]);
+    test("Expect To Not Be Empty", [[1, 2, 3]]);
+
+    // property: asserts presence of an own property (and value optionally)
+    test("Expect To Have Property", [{prop: "my property"}, 'prop']);
+    test("Expect To Have Property", [{prop: "my property"}, 'prop', 'my property']);
+    test("Expect To Have Property", [{a: 'b'}, 'a']);
+
+    // key/keys: asserts the presence of a key. Supports the only modifier
+    test("Expect To Have Key", [{a: 'b'}, 'a']);
+    test("Expect To Only Have Keys", [{ a: 'b', c: 'd' }, 'a', 'c']);
+
+    // throwException/throwError: asserts that the Function throws or not when called
+    test("Expect To ThrowError", [function() { throw "error"}]);
+    test("Expect To ThrowException", [function() { throw new SyntaxError() }, function(e) { 
+      expect(e).to.be.a(SyntaxError);
+    }]);
+    test("Expect To ThrowException", [function() { throw "matches the exception message"}, /matches the exception message/]);
+    test("Expect To Not ThrowException", [function() {}]);
+
+    // within: asserts a number within a range
+    test("Expect To Be Within", [1, 0, Infinity]);
+
+    // greaterThan/above: asserts >
+    test("Expect To Be Above", [3, 0]);
+    test("Expect To Be GreaterThan", [5, 3]);
+
+    // lessThan/below: asserts <
+    test("Expect To Be Below", [0, 3]);
+    test("Expect To Be LessThan", [1, 3]);
   });
 });

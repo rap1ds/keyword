@@ -1,5 +1,5 @@
 {
-	"name": "google-assertations-example",
+	"name": "google-assertions-example",
 	"version": "0.0.1",
 	"dependencies": {
 		"expect.js": "*",

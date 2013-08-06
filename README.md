@@ -375,9 +375,9 @@ key.run("Test Google Search").then(function() {
 });
 ```
 
-## Assertations
+## Assertions
 
-There are a number of good assertation libraries available for JavaScript. You can use any of them, as long as the assertation library throws an error.
+There are a number of good assertion libraries available for JavaScript. You can use any of them, as long as the assertion library throws an error.
 
 Here's a snippet that shows how to define keywords that use [should.js](https://github.com/visionmedia/should.js), [expect.js](https://github.com/LearnBoost/expect.js) and [chai](http://chaijs.com/).
 
@@ -414,7 +414,15 @@ Here's a snippet that shows how to define keywords that use [should.js](https://
 }
 ```
 
-See the full [Google search example with assertations.](examples/google-assertations)
+See the full [Google search example with assertions.](examples/google-assertions)
+
+There is a [keyword wrapper for expect.js](keywords/assertions/expect.js), which let's you use e.g. code like this:
+
+`expect({a: 'b'}).to.not.eql({a: 'c'})`
+
+in a keyword format like this
+
+`"Expect To Not Eql", [{a: 'b', a: 'c'}]`
 
 ## Examples
 
