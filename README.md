@@ -412,7 +412,7 @@ Here's a snippet that shows how to define keywords that use [should.js](https://
     expect(a).to.equal(b);
     next();
 }
-``
+```
 
 See the full [Google search example with assertations.](examples/google-assertations)
 
