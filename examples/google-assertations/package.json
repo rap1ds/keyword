@@ -1,0 +1,9 @@
+{
+	"name": "google-assertations-example",
+	"version": "0.0.1",
+	"dependencies": {
+		"expect.js": "*",
+		"should": "*",
+		"chai": "*"
+	}
+}

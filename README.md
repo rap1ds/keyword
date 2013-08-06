@@ -375,6 +375,47 @@ key.run("Test Google Search").then(function() {
 });
 ```
 
+## Assertations
+
+There are a number of good assertation libraries available for JavaScript. You can use any of them, as long as the assertation library throws an error.
+
+Here's a snippet that shows how to define keywords that use [should.js](https://github.com/visionmedia/should.js), [expect.js](https://github.com/LearnBoost/expect.js) and [chai](http://chaijs.com/).
+
+```javascript
+"Equal (Node assert)": function(next, driver, a, b) {
+    console.log("Equal (Node assert): '" + a + "' and '" + b + "'");
+    var assert = require('assert');
+    assert(a === b);
+    next();
+},
+"Equal (expect.js)": function(next, driver, a, b) {
+    console.log("Equal (expect.js): '" + a + "' and '" + b + "'");
+    var expect = require('expect.js');
+    expect(a).to.be.eql(b);
+    next();
+},
+"Equal (should.js)": function(next, driver, a, b) {
+    console.log("Equal (should.js): '" + a + "' and '" + b + "'");
+    var should = require('should');
+    a.should.eql(b);
+    next();
+},
+"Equal (chai assert)": function(next, driver, a, b) {
+    console.log("Equal (chai assert): '" + a + "' and '" + b + "'");
+    var assert = require('chai').assert;
+    assert.equal(a, b);
+    next();
+},
+"Equal (chai expect)": function(next, driver, a, b) {
+    console.log("Equal (chai expect): '" + a + "' and '" + b + "'");
+    var expect = require('chai').expect;
+    expect(a).to.equal(b);
+    next();
+}
+``
+
+See the full [Google search example with assertations.](examples/google-assertations)
+
 ## Examples
 
 [Basic example:](examples/basic)
