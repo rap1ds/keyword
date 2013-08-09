@@ -224,7 +224,6 @@ describe('runner', function() {
     });
   });
 });
-
 describe('keyword', function() {
   describe('#lib', function() {
     it('takes name and function as parameters', function() {
@@ -290,8 +289,8 @@ describe('keyword', function() {
         expect(result).to.eql("whatever");
       });
     });
-
   });
+});
 describe('#injector', function() {
   it('is called before low-level keyword run', function() {
 
@@ -344,7 +343,6 @@ describe('#injector', function() {
       expect(retVal).to.eql("This is the return value from the next joojoo");
     });
   });
-});
 });
 describe('expect.js', function() {
   key(require('../keywords/assertations/expect'));
