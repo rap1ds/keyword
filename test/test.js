@@ -100,6 +100,48 @@ describe('#isSetOfKeywords()', function() {
 describe('helpers', function() {
   var helpers = require("../lib/helpers");
 
+  describe("#rangeWhile", function() {
+    it('keeps going until `cond` is false', function() {
+      expect(helpers.rangeWhile(function(i) { return i <= 5; }, function(i) { return i % 2 === 0; }))
+        .to.be.eql([true, false, true, false, true, false]);
+    });
+  });
+
+  describe("#mergeArray", function() {
+    it('merges array and indexed items', function() {
+      var mergeArray = helpers.mergeArray;
+      expect(mergeArray([], {1: true, 3: false})).to.be.eql([undefined, true, undefined, false]);
+      expect(mergeArray([1, 2, 3], {1: true, 3: false})).to.be.eql([1, true, 2, false, 3]);
+    });
+  });
+
+  describe('#injectParam', function() {
+    it('injects one param', function() {
+      var run = false;
+      helpers.injectParams(function(first, injected, second) {
+        expect(first).to.be.eql(1);
+        expect(injected).to.be.eql(true);
+        expect(second).to.be.eql(2);
+        run = true;
+      }, [1, 2], {injected: true});
+
+      expect(run).to.be.ok();
+    });
+
+    it('injects two params', function() {
+      var run = false;
+      helpers.injectParams(function(first, injected1, injected2, second) {
+        expect(first).to.be.eql(1);
+        expect(injected1).to.be.eql(true);
+        expect(injected2).to.be.eql("second injected");
+        expect(second).to.be.eql(2);
+        run = true;
+      }, [1, 2], {injected1: true, injected2: "second injected"});
+
+      expect(run).to.be.ok();
+    });
+  });
+
   describe('#flip', function() {
     it('takes function and returns function where params are flipped', function() {
       function minus(a, b) {
@@ -272,20 +314,15 @@ describe('keyword', function() {
     });
     
     it('allows name to be a regexp', function() {
-      var dummyInjector = function(name, fn, args) {
-        fn.apply(null, [_.first(args), null].concat(_.tail(args)));
-      };
-      key.injector(dummyInjector);
+      key.injector(key.defaultInjector);
 
       key({
-        "/This keyword ends to: (.*)/": function(next, injected, regexp) {
-          debugger;
+        "/This keyword ends to: (.*)/": function(next, regexp) {
           next(regexp[1]);
         },
       });
 
       key.run("This keyword ends to: whatever").then(function(result) {
-        debugger;
         expect(result).to.eql("whatever");
       });
     });
@@ -295,24 +332,17 @@ describe('#injector', function() {
   it('is called before low-level keyword run', function() {
 
     key("Injected key", function(next, injected) {
-      expect(injected).to.eql("This was injected");
-      next("This is the return value");
+      next("This is the return value and " + injected);
     });
 
-    key.injector(function(name, fn, args) {
-      var next = _.head(args);
-      var rest = _.tail(args);
-      var injected = "This was injected";
-      var after = function(retVal) {
-        expect(retVal).to.eql("This is the return value");
-        next(retVal + " from the next");
-      };
-
-      fn.apply(null, [after].concat([injected]).concat(rest));
+    key.injector(function(name, args, inject) {
+      inject({
+        injected: "This was injected"
+      });
     });
 
     key.run("Injected key").then(function(retVal) {
-      expect(retVal).to.eql("This is the return value from the next");
+      expect(retVal).to.eql("This is the return value and This was injected");
     });
   });
   it('works also with high-level keywords', function() {
@@ -323,7 +353,7 @@ describe('#injector', function() {
     });
 
     key.run("Highlevel Injected key").then(function(retVal) {
-      expect(retVal).to.eql("This is the return value from the next");
+      expect(retVal).to.eql("This is the return value and This was injected");
     });
   });
   it('does NOT inject anything on high-level keywords', function() {
@@ -345,7 +375,7 @@ describe('#injector', function() {
   });
 });
 describe('expect.js', function() {
-  key(require('../keywords/assertations/expect'));
+  key(require('../keywords/assertions/expect'));
 
   function Ferret() {}
   var tobi = new Ferret();
@@ -354,11 +384,7 @@ describe('expect.js', function() {
   var person = new Mammal();
 
   it('Expect ...', function() {
-    // FIXME Blah, regexp tests and expect need one injected param :/
-    var dummyInjector = function(name, fn, args) {
-      fn.apply(null, [_.first(args), null].concat(_.tail(args)));
-    };
-    key.injector(dummyInjector);
+    key.injector(key.defaultInjector);
 
     function test(name, params) {
       var negativeName = name.indexOf(" Not") !== -1 ? 
@@ -434,11 +460,11 @@ describe('expect.js', function() {
     test("Expect To Only Have Keys", [{ a: 'b', c: 'd' }, 'a', 'c']);
 
     // throwException/throwError: asserts that the Function throws or not when called
-    test("Expect To ThrowError", [function() { throw "error"}]);
-    test("Expect To ThrowException", [function() { throw new SyntaxError() }, function(e) { 
+    test("Expect To ThrowError", [function() { throw "error"; }]);
+    test("Expect To ThrowException", [function() { throw new SyntaxError(); }, function(e) { 
       expect(e).to.be.a(SyntaxError);
     }]);
-    test("Expect To ThrowException", [function() { throw "matches the exception message"}, /matches the exception message/]);
+    test("Expect To ThrowException", [function() { throw "matches the exception message"; }, /matches the exception message/]);
     test("Expect To Not ThrowException", [function() {}]);
 
     // within: asserts a number within a range

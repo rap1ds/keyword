@@ -60,7 +60,7 @@ var suite = {
         .then(next);
     },
 
-    "Should Equal": function(next, driver, a, b) {
+    "Should Equal": function(next, a, b) {
         console.log("Should Equal: '" + a + "' and '" + b + "'");
         assert(a === b);
         next();

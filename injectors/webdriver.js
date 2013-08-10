@@ -24,12 +24,9 @@ var session = webdriver();
     });
     ```
 */
-function webdriverInjector(name, fn, args) {
-    var next = _.head(args);
-    var keywordArgs = _.rest(args);
-
+function webdriverInjector(name, args, inject) {
     session.done(function(driver) {
-        fn.apply(null, [next].concat([driver]).concat(keywordArgs));
+        inject({'driver': driver});
     });
 }
 

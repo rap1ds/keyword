@@ -22,11 +22,10 @@ function functionFromStr(root, str) {
 
 var expectKeywords = {
     "/Expect (To .*)/": function(next) {
-        debugger;
-        var regexp = arguments[2];
+        var regexp = arguments[1];
         var regexpCapture = regexp[1];
-        var expectArg = arguments[3];
-        var restArgs = _.tail(arguments, 4);
+        var expectArg = arguments[2];
+        var restArgs = _.tail(arguments, 3);
 
         var assertation = expect(expectArg);
         var runnable = functionFromStr(assertation, regexpCapture);
@@ -34,10 +33,10 @@ var expectKeywords = {
         next();
     },
     "/Expect (Not To .*)/": function(next) {
-        var regexp = arguments[2];
+        var regexp = arguments[1];
         var regexpCapture = regexp[1];
-        var expectArg = arguments[3];
-        var restArgs = _.tail(arguments, 4);
+        var expectArg = arguments[2];
+        var restArgs = _.tail(arguments, 3);
 
         var assertation = expect(expectArg);
         var runnable = functionFromStr(assertation, regexpCapture);
@@ -47,10 +46,10 @@ var expectKeywords = {
 
     /*  With args is not in the newest NPM release */
     // "/Expect With Args (.*)/": function(next) {
-    //     var regexp = arguments[2];
+    //     var regexp = arguments[1];
     //     var regexpCapture = regexp[1];
-    //     var expectArg = arguments[3];
-    //     var restArgs = _.tail(arguments, 4);
+    //     var expectArg = arguments[2];
+    //     var restArgs = _.tail(arguments, 3);
     //     var assertation = expect(expectArg);
     //     var withArgs = assertation.withArgs.apply(assertation, restArgs);
     //     var runnable = functionFromStr(withArgs, regexpCapture);
@@ -59,9 +58,9 @@ var expectKeywords = {
     // },
     
     "/Expect Fail/": function(next) {
-        var regexp = arguments[2];
+        var regexp = arguments[1];
         var regexpCapture = regexp[1];
-        var restArgs = _.tail(arguments, 4);
+        var restArgs = _.tail(arguments, 3);
         
         var assertation = expect();
         assertation.fail.apply(assertation, restArgs);
