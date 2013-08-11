@@ -287,7 +287,7 @@ key.run("Test Google Search").then(function() {
 
 As you can see from the above example, hooking up a WebDriver session brings in some bloat code to each keyword. To get rid of the bloat, injector comes to help.
 
-An injector is a function, that can execute before and after each keyword execution. Injector is also able to inject new parameters to the low-level keyword function.
+An injector is a function, that can execute before keyword execution and inject parameters to the low-level keyword function.
 
 Here's the Google example with a WebDriver injector. As you can see, the injector adds a `driver` parameter to each keyword.
 
@@ -351,7 +351,7 @@ var suite = {
         .then(next);
     },
 
-    "Should Equal": function(next, driver, a, b) {
+    "Should Equal": function(next, a, b) {
         console.log("Should Equal: '" + a + "' and '" + b + "'");
         assert(a === b);
         next();
