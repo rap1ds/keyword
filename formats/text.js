@@ -65,6 +65,52 @@ function decode(content) {
     return keys;
 }
 
+function indent(num, char) {
+    return function(text) {
+        var indentation = _.range(num).map(function() { return char; }).join('');
+        return indentation + text;
+    };
+}
+
+function groupKeys(keys) {
+    var groupped = keys.reduce(function(memo, keywordPart) {
+        if(_.isArray(keywordPart) || validators.isReturn(keywordPart)) {
+            _.last(memo).push(keywordPart);
+        } else {
+            memo.push([keywordPart]);
+        }
+
+        return memo;
+    }, []);
+
+    return groupped;
+}
+
+var ind = indent(4, ' ');
+
+function keyToString(keyParts) {
+    return ind(_.flatten(keyParts).join('  '));
+}
+
+function keysToString(allKeyParts) {
+    return groupKeys(allKeyParts)
+        .map(keyToString).join('\n');
+}
+
+function encode(keys) {
+
+    return _(keys).chain()
+        .map(function(keywords, name) {
+            return [
+                name,
+                keysToString(keywords)
+            ].join('\n');
+        })
+        .value()
+        .join('\n\n');
+}
+
 module.exports = {
-    decode: decode
+    decode: decode,
+    encode: encode
 };
