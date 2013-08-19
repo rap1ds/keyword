@@ -375,6 +375,36 @@ key.run("Test Google Search").then(function() {
 });
 ```
 
+## Suite formats
+
+You can use multiple formats for writing your high-level keywords and the test suite. Currently, you can use plain JavaScript objects, JSON text and `JSON.parse` it to plain JS object or text format. Here's an example of the text syntax:
+
+```
+Test Google Search
+    Google Search For  keyword driven testing  => $searchResult
+    Should Equal  $searchResult  Keyword-driven testing - Wikipedia, the free encyclopedia
+    Quit
+
+Google Search For
+    Go To Page  http://google.com
+    Fill Input By Name  q  $1
+    Click Element By Name  btnG
+    Pick First Search Result  => $return
+
+Pick First Search Result
+    Get Text Content Of First Tag  h3  => $return
+```
+
+To use the text syntax you have to use text to JavaScript object decoder. Here's how:
+
+```
+// Load text suite
+var file = fs.readFileSync('suite.txt', 'utf8');
+key(key.formats.text.decode(file));
+```
+
+See [Google Text example](examples/google-text) to see working code example
+
 ## Assertions
 
 There are a number of good assertion libraries available for JavaScript. You can use any of them, as long as the assertion library throws an error.
@@ -445,7 +475,7 @@ node keywords-with-parameters.js
 [Google example (without injector):](examples/google-without-injector)
 
 ```bash
-cd examples/google
+cd examples/google-without-injector
 npm install
 phantomjs --webdriver=4444 &
 node google.js
@@ -455,6 +485,24 @@ node google.js
 
 ```bash
 cd examples/google
+npm install
+phantomjs --webdriver=4444 &
+node google.js
+```
+
+[Google text format example:](examples/google-text)
+
+```bash
+cd examples/google-text
+npm install
+phantomjs --webdriver=4444 &
+node google.js
+```
+
+[Google assertions example:](examples/google-assertions)
+
+```bash
+cd examples/google-assertions
 npm install
 phantomjs --webdriver=4444 &
 node google.js
