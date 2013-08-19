@@ -405,6 +405,8 @@ key(key.formats.text.decode(file));
 
 See [Google Text example](examples/google-text) to see working code example
 
+There are couple of other formats on my todo list, namely [Gherkin](https://github.com/cucumber/cucumber/wiki/Gherkin) and Robot Framework syntax (which is syntactically quite close to keyword.js text format).
+
 ## Assertions
 
 There are a number of good assertion libraries available for JavaScript. You can use any of them, as long as the assertion library throws an error.
