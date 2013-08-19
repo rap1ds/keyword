@@ -11,6 +11,7 @@
   "eqnull": true,
   "node": true,
   "quotmark": false,
+  "multistr": true,
   "globals": {
     "exports": true,
     "it": true,
