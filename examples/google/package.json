@@ -1,5 +1,7 @@
 {
-	"name": "google-example",
-	"version": "0.0.1",
-	"dependencies": { }
+  "name": "google-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "patjs": "~0.1.1"
+  }
 }
