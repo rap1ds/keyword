@@ -98,5 +98,31 @@ describe('gherkin format', function() {
         ]
       });
     });
+    it('supports scenario outlines', function(){
+      var feature = [
+      "Feature: Scenario Outline",
+      "",
+      "Scenario Outline: eating",
+      "  Given there are <start> cucumbers",
+      "  When I eat <eat> cucumbers",
+      "  Then I should have <left> cucumbers",
+      "",
+      "  Examples:",
+      "    | start | eat | left |",
+      "    |  12   |  5  |  7   |",
+      "    |  20   |  5  |  15  |"
+      ].join('\n');
+
+      expect(gherkin.decode(feature)).to.be.eql({
+        "Scenario Outline: eating": [
+          "Given there are 12 cucumbers",
+          "When I eat 5 cucumbers",
+          "Then I should have 7 cucumbers",
+          "Given there are 20 cucumbers",
+          "When I eat 5 cucumbers",
+          "Then I should have 15 cucumbers",
+        ]
+      });
+    });
   });
 });

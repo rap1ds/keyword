@@ -9,6 +9,7 @@ function decode(content) {
   var scenarioSteps = [];
   var background = false;
   var backgroundSteps = [];
+  var scenarioOutline = false;
 
   var Lexer = require('gherkin').Lexer('en');
 
@@ -38,10 +39,28 @@ function decode(content) {
 
       firstScenario = false;
       background = false;
+      scenarioOutline = false;
     },
-    scenario_outline: function() {},
-    examples: function() {},
+    scenario_outline: function(keyword, name) {
+      if(!firstScenario) {
+        if(scenarioSteps.length) {
+          keywords[scenarioName] = backgroundSteps.concat(scenarioSteps);
+          featureSteps.push(scenarioName);
+        }
+      }
+
+      firstScenario = false;
+      background = false;
+      scenarioOutline = true;
+      
+      console.log("SCENARIO OUTLINE")
+      console.log('  ' + keyword + ': ' + name);
+    },
+    examples: function(keyword, name) {
+      console.log('  ' + keyword + ': ' + name);
+    },
     step: function(keyword, name) {
+      console.log(keyword + name);
       if(background) {
         backgroundSteps.push(keyword + name);
       } else {
@@ -49,7 +68,9 @@ function decode(content) {
       }
     },
     doc_string: function() {},
-    row: function() {},
+    row: function(row) {
+      console.log(row);
+    },
     eof: function() {
       if(scenarioSteps.length) {
         keywords[scenarioName] = backgroundSteps.concat(scenarioSteps);
