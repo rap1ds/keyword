@@ -27,7 +27,7 @@
   "dependencies": {
     "underscore": "1.4.x",
     "selenium-node-webdriver": "*",
-    "patjs": "~0.1.1"
+    "patjs": "~0.1.3"
   },
   "scripts": {
     "test": "mocha"
