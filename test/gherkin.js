@@ -114,6 +114,10 @@ describe('gherkin format', function() {
       ].join('\n');
 
       expect(gherkin.decode(feature)).to.be.eql({
+        "Feature: Scenario Outline": [
+          "Scenario Outline: eating"
+        ],
+
         "Scenario Outline: eating": [
           "Given there are 12 cucumbers",
           "When I eat 5 cucumbers",

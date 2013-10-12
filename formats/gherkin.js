@@ -10,6 +10,8 @@ function decode(content) {
   var background = false;
   var backgroundSteps = [];
   var scenarioOutline = false;
+  var scenarioOutlineSteps = [];
+  var examples = [];
 
   var Lexer = require('gherkin').Lexer('en');
 
@@ -20,6 +22,7 @@ function decode(content) {
     feature: function(keyword, name) {
       featureName = keyword + ': ' + name;
       featureSteps = [];
+      backgroundSteps = [];
     },
 
     background: function() {
@@ -28,7 +31,11 @@ function decode(content) {
 
     scenario: function(keyword, name) {
       if(!firstScenario) {
-        if(scenarioSteps.length) {
+        if(scenarioOutline && scenarioSteps.length) {
+          // TODO !!!
+          keywords[scenarioName] = backgroundSteps.concat(scenarioSteps);
+          featureSteps.push(scenarioName);
+        } else {
           keywords[scenarioName] = backgroundSteps.concat(scenarioSteps);
           featureSteps.push(scenarioName);
         }
@@ -43,24 +50,27 @@ function decode(content) {
     },
     scenario_outline: function(keyword, name) {
       if(!firstScenario) {
-        if(scenarioSteps.length) {
+        if(scenarioOutline && scenarioSteps.length) {
+          // TODO!!!
+          keywords[scenarioName] = backgroundSteps.concat(scenarioSteps);
+          featureSteps.push(scenarioName);
+        } else {
           keywords[scenarioName] = backgroundSteps.concat(scenarioSteps);
           featureSteps.push(scenarioName);
         }
       }
 
+      scenarioName = keyword + ': ' + name;
+      scenarioSteps = [];
+
       firstScenario = false;
       background = false;
       scenarioOutline = true;
-      
-      console.log("SCENARIO OUTLINE")
-      console.log('  ' + keyword + ': ' + name);
     },
     examples: function(keyword, name) {
-      console.log('  ' + keyword + ': ' + name);
+      examples = [];
     },
     step: function(keyword, name) {
-      console.log(keyword + name);
       if(background) {
         backgroundSteps.push(keyword + name);
       } else {
@@ -69,7 +79,7 @@ function decode(content) {
     },
     doc_string: function() {},
     row: function(row) {
-      console.log(row);
+      examples.push(row);
     },
     eof: function() {
       if(scenarioSteps.length) {
